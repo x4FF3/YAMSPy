@@ -829,7 +829,7 @@ class MSPy:
             15: "BLOCKED_HARDWARE_FAILURE",
             26: "BLOCKED_INVALID_SETTING"
             }
-        self.loglevel = loglevel
+        self.loglevel = loglevel.upper()
 
         if logfilename:
             logging.basicConfig(format="[%(levelname)s] [%(asctime)s]: %(message)s",
@@ -909,8 +909,7 @@ class MSPy:
         for _ in range(trials):
             try:
                 self.conn.open()
-                if self.loglevel == 'DEBUG':
-                    self.basic_info()
+                self.basic_info()
                 return 0
                 
             except serial.SerialException as err:
@@ -947,8 +946,10 @@ class MSPy:
             if self.send_RAW_msg(MSPy.MSPCodes[msg], data=[]):
                 dataHandler = self.receive_msg()
                 self.process_recv_data(dataHandler)
-    
-        print(self.CONFIG)
+        if self.loglevel == 'DEBUG':
+            print(self.CONFIG)
+        if self.loglevel == 'INFO':
+            print(self.CONFIG['targetName'])
 
     def fast_read_altitude(self):
         # Request altitude
