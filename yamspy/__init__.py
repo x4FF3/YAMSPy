@@ -829,6 +829,7 @@ class MSPy:
             15: "BLOCKED_HARDWARE_FAILURE",
             26: "BLOCKED_INVALID_SETTING"
             }
+        self.loglevel = loglevel
 
         if logfilename:
             logging.basicConfig(format="[%(levelname)s] [%(asctime)s]: %(message)s",
@@ -908,7 +909,8 @@ class MSPy:
         for _ in range(trials):
             try:
                 self.conn.open()
-                self.basic_info()
+                if self.loglevel == 'DEBUG':
+                    self.basic_info()
                 return 0
                 
             except serial.SerialException as err:
